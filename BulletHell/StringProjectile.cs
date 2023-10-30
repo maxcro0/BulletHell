@@ -23,25 +23,43 @@ namespace BulletHell
             width = _width;
             height = _height;
         }
-        public void Move()
+        public void Move(string direction)
         {
-            x += xSpeed * speed;
-            y += ySpeed * speed;           
+            if (direction == "left")
+            {
+                x -= xSpeed;
+            }
+            else if (direction == "right")
+            {
+                x += xSpeed;
+            }
+
+            if (direction == "up")
+            {
+                y -= ySpeed;
+            }
+            else if (direction == "down")
+            {
+                y += ySpeed;
+            }
+
+            //x += xSpeed * speed;
+            //y += ySpeed * speed;           
         }
 
-        public void Collision(Enemy1 e)
+        public bool Collision(Enemy1 e)
         {
             int xBox = (int)Math.Round(x);
             int yBox = (int)Math.Round(y);
             Rectangle enemyRec = new Rectangle(e.x, e.y, e.width, e.height);
             Rectangle projectileRec = new Rectangle(xBox, yBox, width, height);
 
-            if (projectileRec.IntersectsWith(enemyRec))
-            {
-                Enemy1.health -= 100;
-            }
+            return true;
             
+                 
         }
+        
+        
     }
 
   

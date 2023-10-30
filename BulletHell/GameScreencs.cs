@@ -20,12 +20,17 @@ namespace BulletHell
         SolidBrush redBrush = new SolidBrush(Color.Red);
         SolidBrush yellowBrush = new SolidBrush(Color.Goldenrod);
         SolidBrush blueBrush = new SolidBrush(Color.SlateBlue);
+        SolidBrush whiteBrush = new SolidBrush(Color.White);
         Boolean leftArrowDown, rightArrowDown, upArrowDown, downArrowDown;
         public static bool col = false;
         bool goLeft = true;
+        bool shooting = false;
         List<ProjectileCircle> projectiles = new List<ProjectileCircle>();
+        List<StringProjectile> friendProjectiles = new List<StringProjectile>();        
         int attack1Timer = 0;
+        int shotTimer = 0;
         bool phase1 = true;
+        Point[] arrow;
 
         private void label1_Click(object sender, EventArgs e)
         {
@@ -41,6 +46,8 @@ namespace BulletHell
             me = new Player(175, 415, 5, 5);
             boss = new Enemy1(165, 25, 3, 3);
             projectiles = boss.attack1();
+            arrow = new Point [] { new Point (boss.x,445), new Point(boss.xCenter,435), new Point(boss.x+boss.width, 445) };
+                
         }
 
         private void GameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -63,6 +70,10 @@ namespace BulletHell
                     me.ySpeed = 3;
                     me.xSpeed = 3;
                     break;
+                case Keys.Space:
+                    shooting = true;
+                    break;
+
 
 
 
@@ -93,6 +104,17 @@ namespace BulletHell
                 me.Move("down");
             }
 
+            if (shooting == true)
+            {
+                shotTimer++;
+                if (shotTimer == 2)
+                {
+                    StringProjectile p = new StringProjectile(me.x + me.size / 2, me.y, 10, 10, 3, 5);
+                    friendProjectiles.Add(p);
+                    shotTimer = 0;
+                }
+            }
+
 
 
             foreach (ProjectileCircle p in projectiles)
@@ -107,7 +129,16 @@ namespace BulletHell
                     me.y = 415;
                     break;
                 }
-                
+
+            }
+
+            foreach (StringProjectile p in friendProjectiles)
+            {
+                p.Move("up");
+                //if (p.Collision(boss))
+                //{
+                //    boss.health -= 100;
+                //}
             }
 
             if (phase1 == true)
@@ -181,6 +212,9 @@ namespace BulletHell
 
             }
 
+            arrow = new Point[] { new Point(boss.x, 445), new Point(boss.xCenter, 435), new Point(boss.x + boss.width, 445) };
+
+
             Refresh();
         }
 
@@ -202,13 +236,20 @@ namespace BulletHell
 
             //Shows Graze
             grazeOut.Text = graze + "";
-
+            e.Graphics.FillPolygon(whiteBrush, arrow);            
             e.Graphics.FillEllipse(redBrush, me.x, me.y, me.size, me.size);
             e.Graphics.FillEllipse(yellowBrush, boss.x, boss.y, boss.height, boss.width);
             foreach (ProjectileCircle p in projectiles)
             {
                 e.Graphics.FillEllipse(blueBrush, p.x, p.y, p.size, p.size);
             }
+            foreach (StringProjectile p in friendProjectiles)
+            {
+                e.Graphics.FillRectangle(whiteBrush, p.x, p.y,p.width,p.height);
+                
+            }
+
+            
         }
 
         private void GameScreen_KeyUp(object sender, KeyEventArgs e)
@@ -231,6 +272,9 @@ namespace BulletHell
                     me.ySpeed = 5;
                     me.xSpeed = 5;
                     break;
+                case Keys.Space:
+                    shooting = false;
+                    break ;
 
             }
         }
