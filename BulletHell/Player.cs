@@ -13,6 +13,7 @@ namespace BulletHell
         public int lives = 3;
         public int bomb = 3;
         public int xCenter;
+        public int yCenter;
 
         public Player(int _x, int _y, int _xSpeed, int _ySpeed)
         {
@@ -21,6 +22,7 @@ namespace BulletHell
             xSpeed = _xSpeed;
             ySpeed = _ySpeed;
             xCenter = x + size / 2;
+            yCenter = y + size / 2;
         }
         public void Move(string direction)
         {

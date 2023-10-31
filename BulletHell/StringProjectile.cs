@@ -54,7 +54,13 @@ namespace BulletHell
             Rectangle enemyRec = new Rectangle(e.x, e.y, e.width, e.height);
             Rectangle projectileRec = new Rectangle(xBox, yBox, width, height);
 
-            return true;
+            if (projectileRec.IntersectsWith(enemyRec))
+            {
+                return true;
+            }
+            return false;
+           
+        }
             
                  
         }
@@ -63,7 +69,7 @@ namespace BulletHell
     }
 
   
-    }
+    
 
 
 

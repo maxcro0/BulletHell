@@ -12,7 +12,7 @@ namespace BulletHell
         public int height = 30;
         public int width = 30;
         public int x, y, xSpeed, ySpeed;
-        public int health = 30000;
+        public int health = 400;
         public int xCenter;
         public int yCenter;
 
@@ -48,7 +48,7 @@ namespace BulletHell
 
                 //  //bullet object requires float values to draw on screen
                 //  ProjectileCircle p = new ProjectileCircle(x, y, size, bulletSpeed, (float)xStep, (float)-yStep);
-                ProjectileCircle p = new ProjectileCircle(xCenter,yCenter, (float)xStep, (float)yStep, 8, 4);
+                ProjectileCircle p = new ProjectileCircle(xCenter,yCenter, (float)xStep, (float)yStep, 8, 3);
                 attack1List.Add(p);
             }
 

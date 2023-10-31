@@ -14,6 +14,9 @@ namespace BulletHell
     {
         public static int points;
         public static int graze;
+        double healthBar = 300;
+        double healthRatio;
+
         Player me;
         Enemy1 boss;
         ProjectileCircle projectile;
@@ -21,10 +24,12 @@ namespace BulletHell
         SolidBrush yellowBrush = new SolidBrush(Color.Goldenrod);
         SolidBrush blueBrush = new SolidBrush(Color.SlateBlue);
         SolidBrush whiteBrush = new SolidBrush(Color.White);
+        SolidBrush grayBrush = new SolidBrush(Color.Gray);
         Boolean leftArrowDown, rightArrowDown, upArrowDown, downArrowDown;
         public static bool col = false;
         bool goLeft = true;
         bool shooting = false;
+        bool bombing = false;
         List<ProjectileCircle> projectiles = new List<ProjectileCircle>();
         List<StringProjectile> friendProjectiles = new List<StringProjectile>();        
         int attack1Timer = 0;
@@ -43,11 +48,11 @@ namespace BulletHell
         public GameScreencs()
         {
             InitializeComponent();
-            me = new Player(175, 415, 5, 5);
-            boss = new Enemy1(165, 25, 3, 3);
+            me = new Player(175, 415, 4, 4);
+            boss = new Enemy1(165, 25, 2, 2);
             projectiles = boss.attack1();
             arrow = new Point [] { new Point (boss.x,445), new Point(boss.xCenter,435), new Point(boss.x+boss.width, 445) };
-                
+            healthRatio = healthBar / boss.health;
         }
 
         private void GameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -67,12 +72,17 @@ namespace BulletHell
                     downArrowDown = true;
                     break;
                 case Keys.ShiftKey:
-                    me.ySpeed = 3;
-                    me.xSpeed = 3;
+                    me.ySpeed = 2;
+                    me.xSpeed = 2;
                     break;
                 case Keys.Space:
                     shooting = true;
                     break;
+                case Keys.V:
+                    bombing = true;
+                    break;
+
+
 
 
 
@@ -83,7 +93,6 @@ namespace BulletHell
         private void gameTimer_Tick(object sender, EventArgs e)
         {
             attack1Timer++;
-
 
 
             if (leftArrowDown && me.x - 8 > 0)
@@ -115,6 +124,11 @@ namespace BulletHell
                 }
             }
 
+            //if (bombing == true)
+            //{
+            //    Rectangle bombBox = new Rectangle(me.xCenter,);
+            //}
+
 
 
             foreach (ProjectileCircle p in projectiles)
@@ -125,9 +139,9 @@ namespace BulletHell
 
                     //make some circles explode from player location
 
-                    me.x = 174;
-                    me.y = 415;
-                    break;
+                    //me.x = 174;
+                    //me.y = 415;
+                    //break;
                 }
 
             }
@@ -135,10 +149,10 @@ namespace BulletHell
             foreach (StringProjectile p in friendProjectiles)
             {
                 p.Move("up");
-                //if (p.Collision(boss))
-                //{
-                //    boss.health -= 100;
-                //}
+                if (p.Collision(boss))
+                {
+                    boss.health -= 1;
+                }
             }
 
             if (phase1 == true)
@@ -169,16 +183,13 @@ namespace BulletHell
                         boss.Move("right");
                     }
 
-                    if (attack1Timer * 1 == attack1Timer)
-                    {
-                        boss.attack1();
-                    }
+                    
 
 
 
                 }
                
-                if (attack1Timer == 15)
+                if (attack1Timer == 20)
                 {
                     projectiles.AddRange(boss.attack1());
                     attack1Timer = 0;
@@ -225,9 +236,14 @@ namespace BulletHell
 
         private void GameScreencs_Paint(object sender, PaintEventArgs e)
         {
+            
             //Shows player life
             livesOut.Text = me.lives + "";
-
+            
+           
+           // Shows Health Bar            
+            e.Graphics.FillRectangle(grayBrush, 0, 20, 300, 20);
+            e.Graphics.FillRectangle(redBrush, 0, 25, (int)(boss.health * healthRatio), 10);
             //Shows Bomb
             bombsOut.Text = me.bomb + "";
 
@@ -238,7 +254,11 @@ namespace BulletHell
             grazeOut.Text = graze + "";
             e.Graphics.FillPolygon(whiteBrush, arrow);            
             e.Graphics.FillEllipse(redBrush, me.x, me.y, me.size, me.size);
+
+            //Show Boss
             e.Graphics.FillEllipse(yellowBrush, boss.x, boss.y, boss.height, boss.width);
+            e.Graphics.DrawString(boss.health.ToString(), new Font("Arial",10), whiteBrush, boss.x, boss.y);
+
             foreach (ProjectileCircle p in projectiles)
             {
                 e.Graphics.FillEllipse(blueBrush, p.x, p.y, p.size, p.size);
@@ -275,6 +295,7 @@ namespace BulletHell
                 case Keys.Space:
                     shooting = false;
                     break ;
+                
 
             }
         }
