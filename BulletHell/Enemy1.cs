@@ -16,7 +16,7 @@ namespace BulletHell
         public int xCenter;
         public int yCenter;
         int altEye;
-        int gapSwitch;
+        public int gapSwitch;
         List<ProjectileCircle> attack1List;
         List<ProjectileCircle> attack2List;
 
@@ -30,7 +30,7 @@ namespace BulletHell
             xCenter = x+width/2;
             yCenter = y+height/2;
             altEye = 30;
-            gapSwitch = 0;
+            gapSwitch = 37;
             
         }
 
@@ -65,7 +65,7 @@ namespace BulletHell
             attack2List = new List<ProjectileCircle>(); ;
 
 
-            for (int i = gapSwitch; i <= 380; i += altEye)
+            for (int i = gapSwitch; i <= 500; i += altEye)
             {
                 //theta measure for angle of fire, (float uses less memory)
                 // float thetaAngle = (90 - hero.angle);
@@ -88,35 +88,63 @@ namespace BulletHell
                 {
                     altEye = 30;
                 }
-               
-
+               if (gapSwitch == 37)
+                {
+                    gapSwitch = 77;
+                }
+               else
+                {
+                    gapSwitch = 37;
+                }
             }
 
-            if (gapSwitch == 0)
-            {
-                gapSwitch = 27;
-            }
-            else
-            {
-                gapSwitch = 0;
-            }
+            
 
-            for (int i = 0;i <11; i++)
+            for (int i = 0;i <50; i++)
             {
                 int y0 = (randint.Next(0, 660));
-                int x0;
-                int randomx = (randint.Next(1, 3));
-                if (randomx == 2) ;
+                int x0 = randint.Next(1, 4);
+                int randomX;
+                
+                int direction;
+
+                if (x0 == 2)
                 {
-                    x0 = 0;
+                    direction = 2;
+                    randomX = 0;
                 }
-                if (randomx == 1) ;
+                else
                 {
-                    x0 = 350;
+                    direction = -2;
+                    randomX = 340;
                 }
-                ProjectileCircle p = new ProjectileCircle(x0, y0, 2, 2, 6, 3);
+                
+                ProjectileCircle p = new ProjectileCircle(randomX, y0, direction, 0, 6, 3);
+                
                 attack2List.Add(p);
             }
+           
+
+            for (int i = 0; i < 360; i += 15)
+            {
+                //theta measure for angle of fire, (float uses less memory)
+                // float thetaAngle = (90 - hero.angle);
+                float thetaAngle = (90 - i);
+
+
+                // determine the end point for each hand (result must be a double)
+                double xStep = Math.Cos(thetaAngle * Math.PI / 180.0);
+                double yStep = Math.Sin(thetaAngle * Math.PI / 180.0);
+
+                //  //bullet object requires float values to draw on screen
+                //  ProjectileCircle p = new ProjectileCircle(x, y, size, bulletSpeed, (float)xStep, (float)-yStep);
+                ProjectileCircle p = new ProjectileCircle(45,60, (float)xStep, (float)yStep, 8, 5, thetaAngle);
+                ProjectileCircle b = new ProjectileCircle(300,60,(float)xStep, (float)yStep, 8, 5, thetaAngle);
+                
+                attack2List.Add(p);
+                attack2List.Add(b);
+            }
+
             return attack2List;
         }
 

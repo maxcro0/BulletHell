@@ -36,10 +36,11 @@ namespace BulletHell
         List<ProjectileCircle> projectiles = new List<ProjectileCircle>();
         List<StringProjectile> friendProjectiles = new List<StringProjectile>();
         int attack1Timer = 0;
+        int attack2Timer = 0;
         int invulTimer = 0;
         int shotTimer = 0;
-        bool phase1 = false;
-        bool phase2 = true;
+        bool phase1 = true;
+        bool phase2 = false;
         Point[] arrow;
         public Point phase2attack1;
         public Point phase2attack2;    
@@ -58,8 +59,7 @@ namespace BulletHell
         {
             InitializeComponent();
             me = new Player(175, 415, 4, 4);
-            boss = new Enemy1(153, 25, 2, 2);
-            projectiles = boss.attack1();
+            boss = new Enemy1(153, 25, 2, 2);            
             arrow = new Point[] { new Point(boss.x, 445), new Point(boss.xCenter, 435), new Point(boss.x + boss.width, 445) };
             phase2attack1 = new Point(45, 35);
             phase2attack2 = new Point(405, 35);
@@ -151,7 +151,7 @@ namespace BulletHell
             {
                 phase1 = false;
                 phase2 = true;
-                boss.health = 800;
+                boss.health = 2000;
                 maxHealth = boss.health;
                 healthRatio = healthBar / boss.health;
             }
@@ -263,6 +263,8 @@ namespace BulletHell
             }
             if (phase2 == true)
             {
+                attack2Timer++;
+
                 if (boss.xCenter > 225 - boss.width)
                 {
                     boss.Move("left");
@@ -283,11 +285,19 @@ namespace BulletHell
                     boss.Move("up");
                 }
 
-            if (attack1Timer == 60)
+                if (boss.xCenter == 176  && boss.yCenter == 200)
                 {
-                    projectiles.AddRange(boss.attack2());
-                    attack1Timer=0;
+                    if (attack2Timer == 45)
+                    {
+                        projectiles.AddRange(boss.attack2());
+                        attack1Timer = 0;
 
+
+                    }
+                    if (attack2Timer > 45)
+                    {
+                        attack2Timer = 0;
+                    }
                 }
 
             }
