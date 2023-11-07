@@ -18,6 +18,7 @@ namespace BulletHell
         double healthRatio;
         string healthbarText;
         int maxHealth = 400;
+        string moveDirection = "right";
 
         Player me;
         Enemy1 boss;
@@ -30,6 +31,7 @@ namespace BulletHell
         Boolean leftArrowDown, rightArrowDown, upArrowDown, downArrowDown;
         public static bool col = false;
         bool goLeft = true;
+        bool goUp = false;
         bool shooting = false;
         bool bombing = false;
         bool justDied;
@@ -41,9 +43,11 @@ namespace BulletHell
         int shotTimer = 0;
         bool phase1 = true;
         bool phase2 = false;
+        bool phase3 = false;
+        bool phase3initial = false;
         Point[] arrow;
         public Point phase2attack1;
-        public Point phase2attack2;    
+        public Point phase2attack2;
 
         private void label1_Click(object sender, EventArgs e)
         {
@@ -59,7 +63,7 @@ namespace BulletHell
         {
             InitializeComponent();
             me = new Player(175, 415, 4, 4);
-            boss = new Enemy1(153, 25, 2, 2);            
+            boss = new Enemy1(153, 25, 2, 2);
             arrow = new Point[] { new Point(boss.x, 445), new Point(boss.xCenter, 435), new Point(boss.x + boss.width, 445) };
             phase2attack1 = new Point(45, 35);
             phase2attack2 = new Point(405, 35);
@@ -152,6 +156,14 @@ namespace BulletHell
                 phase1 = false;
                 phase2 = true;
                 boss.health = 2000;
+                maxHealth = boss.health;
+                healthRatio = healthBar / boss.health;
+            }
+            if (boss.health <= 0 && phase2 == true)
+            {
+                phase2 = false;
+                phase3 = true;
+                boss.health = 800;
                 maxHealth = boss.health;
                 healthRatio = healthBar / boss.health;
             }
@@ -285,7 +297,7 @@ namespace BulletHell
                     boss.Move("up");
                 }
 
-                if (boss.xCenter == 176  && boss.yCenter == 200)
+                if (boss.xCenter == 176 && boss.yCenter == 200)
                 {
                     if (attack2Timer == 45)
                     {
@@ -300,8 +312,91 @@ namespace BulletHell
                     }
                 }
 
+
+
             }
 
+            if (phase3 == true)
+            {
+                if (moveDirection == "right" && boss.x > 250)
+                {
+                    moveDirection = "down";
+                }
+
+                if (moveDirection == "down" && boss.y >= 250)
+                {
+                    moveDirection = "left";
+                }
+
+                if (moveDirection == "left" && boss.x <=50)
+                {
+                    moveDirection = "up";
+                }
+
+                if ((moveDirection == "up" && boss.y >=250 ))
+                {
+                    moveDirection = "right";
+                }
+
+                //
+                //
+                //
+
+                boss.Move(moveDirection);
+
+                //if (phase3initial == false)
+                //{
+                //    if (boss.yCenter > 100)
+                //    {
+                //        goUp = true;
+                //    }
+                //    if (boss.yCenter < 100)
+
+                //    if (boss.xCenter < 400 - boss.width)
+                //    {
+                //        goLeft = false;
+                //    }
+                //}
+                //if (boss.yCenter == 100 && boss.xCenter == 400-boss.width && phase3initial == false)
+                //{
+                //    phase3initial = true;
+                //}
+
+                //if (boss.y == 100 && phase3initial == true)
+                //{
+                //    if (boss.xCenter >= 400 - boss.width)
+                //    {
+                //        goLeft = true;
+                //    }
+
+                //    if (boss.x <= 0 + boss.width)
+                //    {
+                //        goLeft = false;
+                //        goUp = false;
+                //    }
+
+
+                //    if (goLeft == true)
+                //    {
+                //        boss.Move("left");
+                //    }
+
+                //    if (goLeft == false)
+                //    {
+                //        boss.Move("right");
+                //    }
+
+                //    if (goUp == true)
+                //    {
+                //        boss.Move("up");
+                //    }
+                //    if (goUp == false)
+                //    {
+                //        boss.Move("down");
+                //    }
+                //}
+
+            }
 
             arrow = new Point[] { new Point(boss.x, 445), new Point(boss.xCenter, 435), new Point(boss.x + boss.width, 445) };
 
