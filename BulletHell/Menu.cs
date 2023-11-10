@@ -19,7 +19,13 @@ namespace BulletHell
 
         private void lunaticButton_Click(object sender, EventArgs e)
         {
+            //Changes to game
             Form1.ChangeScreen(this, new GameScreencs());
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

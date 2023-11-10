@@ -12,13 +12,15 @@ namespace BulletHell
 {
     public partial class GameScreencs : UserControl
     {
-        public static int points;
-        public static int graze;
+        public static int points = 0;
+        public static int graze = 0 ;
+        int bombamm = 3;
         double healthBar = 338;
         double healthRatio;
         string healthbarText;
         int maxHealth = 400;
         string moveDirection = "right";
+        public static bool win = false;
 
         Player me;
         Enemy1 boss;
@@ -34,11 +36,13 @@ namespace BulletHell
         bool goUp = false;
         bool shooting = false;
         bool bombing = false;
+        int bombTimer = 0;
         bool justDied;
         List<ProjectileCircle> projectiles = new List<ProjectileCircle>();
         List<StringProjectile> friendProjectiles = new List<StringProjectile>();
         int attack1Timer = 0;
         int attack2Timer = 0;
+        int attack3Timer = 0;
         int invulTimer = 0;
         int shotTimer = 0;
         bool phase1 = true;
@@ -61,19 +65,27 @@ namespace BulletHell
 
         public GameScreencs()
         {
+            // Initializing Me, Boss, Boss arrow, Phase 2 points, Health ratio
             InitializeComponent();
+            
             me = new Player(175, 415, 4, 4);
             boss = new Enemy1(153, 25, 2, 2);
             arrow = new Point[] { new Point(boss.x, 445), new Point(boss.xCenter, 435), new Point(boss.x + boss.width, 445) };
             phase2attack1 = new Point(45, 35);
             phase2attack2 = new Point(405, 35);
             healthRatio = healthBar / boss.health;
+            points = 0;
+            graze = 0;
+
+
+
 
 
         }
 
         private void GameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
+            // Movement keys down
             switch (e.KeyCode)
             {
                 case Keys.A:
@@ -96,7 +108,15 @@ namespace BulletHell
                     shooting = true;
                     break;
                 case Keys.V:
-                    bombing = true;
+                    if (bombing == false)
+                    {
+                        if (bombamm > 0 && bombTimer >= 20)
+                        {
+                            bombing = true;
+                            bombamm--;
+
+                        }
+                    }
                     break;
 
 
@@ -109,6 +129,7 @@ namespace BulletHell
 
         private void deleteProjectiles()
         {
+            // Deletes each projectile if off screen
             foreach (ProjectileCircle p in projectiles)
             {
                 if (p.x < -5)
@@ -134,31 +155,48 @@ namespace BulletHell
                     projectiles.Remove(p);
                     break;
                 }
+
             }
+
         }
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
+            // First phase timer and Bomb timer
             attack1Timer++;
+            bombTimer++;
 
+            //Checks if lives are gone
+            if (me.lives <= 0)
+            {
+                gameTimer.Enabled = false;
+                Form1.ChangeScreen(this, new Gameover());
+            }
+           
+            //Checks if you just died and adds to the invulnerability window if you did
             if (justDied == true)
             {
                 invulTimer++;
             }
-            if (invulTimer == 25)
+
+            //After a second, you are no longer invulnerable
+            if (invulTimer == 50)
             {
                 invulTimer = 0;
                 justDied = false;
             }
 
+            //Changes phase 1 to phase 2
             if (boss.health <= 0 && phase1 == true)
             {
                 phase1 = false;
                 phase2 = true;
-                boss.health = 2000;
+                boss.health = 1500;
                 maxHealth = boss.health;
                 healthRatio = healthBar / boss.health;
             }
+            
+            //Changes phase 2 to phase 3
             if (boss.health <= 0 && phase2 == true)
             {
                 phase2 = false;
@@ -168,6 +206,16 @@ namespace BulletHell
                 healthRatio = healthBar / boss.health;
             }
 
+            //You Win
+            if (boss.health <= 0 && phase3 == true)
+            {
+                win = true;
+                gameTimer.Enabled = false;
+                Form1.ChangeScreen(this, new Gameover());
+
+            }
+
+            //Player movement based on movement bools
             if (leftArrowDown && me.x - 8 > 0)
             {
                 me.Move("left");
@@ -186,6 +234,7 @@ namespace BulletHell
                 me.Move("down");
             }
 
+            //Checks if you are pressing space
             if (shooting == true)
             {
                 shotTimer++;
@@ -197,14 +246,17 @@ namespace BulletHell
                 }
             }
 
-            //if (bombing == true)
-            //{
-            //    Rectangle bombBox = new Rectangle();
-            //}
+            //Checks if you are bombing 
+            if (bombing == true)
+            {
+
+                projectiles.Clear();
+                bombing = false;
+            }
 
 
 
-
+            //Moves each projectile and checks collisions
             foreach (ProjectileCircle p in projectiles)
             {
                 p.Move();
@@ -214,18 +266,18 @@ namespace BulletHell
 
                     if (p.Collision(me))
                     {
-
-                        //make some circles explode from player location
-
                         me.x = 174;
                         me.y = 415;
                         justDied = true;
+                        me.lives--;
                         break;
                     }
                 }
 
             }
 
+
+            //Moves your shots up and checks for collisions with boss
             foreach (StringProjectile p in friendProjectiles)
             {
                 p.Move("up");
@@ -235,6 +287,7 @@ namespace BulletHell
                 }
             }
 
+            //Moves boss in phase 1
             if (phase1 == true)
             {
                 if (boss.y < 200)
@@ -265,14 +318,18 @@ namespace BulletHell
 
                 }
 
+                //Shoots projectiles in phase 1
                 if (attack1Timer == 20)
                 {
                     projectiles.AddRange(boss.attack1());
                     attack1Timer = 0;
                 }
+
                 deleteProjectiles();
 
             }
+
+            //Moves boss to center if its phase 2
             if (phase2 == true)
             {
                 attack2Timer++;
@@ -297,6 +354,7 @@ namespace BulletHell
                     boss.Move("up");
                 }
 
+                //Starts shooting if boss is done moving
                 if (boss.xCenter == 176 && boss.yCenter == 200)
                 {
                     if (attack2Timer == 45)
@@ -316,8 +374,10 @@ namespace BulletHell
 
             }
 
+            //Moves boss if its phase 3
             if (phase3 == true)
             {
+                attack3Timer++;
                 if (moveDirection == "right" && boss.x > 250)
                 {
                     moveDirection = "down";
@@ -328,73 +388,28 @@ namespace BulletHell
                     moveDirection = "left";
                 }
 
-                if (moveDirection == "left" && boss.x <=50)
+                if (moveDirection == "left" && boss.x <= 50)
                 {
                     moveDirection = "up";
                 }
 
-                if ((moveDirection == "up" && boss.y >=250 ))
+                if ((moveDirection == "up" && boss.y <= 50))
                 {
                     moveDirection = "right";
                 }
 
-                //
-                //
-                //
+                //Shoots in intervals
+                if (attack3Timer == 25)
+                {
+                    projectiles.AddRange(boss.attack1());
+                    attack3Timer = 0;
+                }
+                deleteProjectiles();
 
+                //Moves boss in move direction
                 boss.Move(moveDirection);
 
-                //if (phase3initial == false)
-                //{
-                //    if (boss.yCenter > 100)
-                //    {
-                //        goUp = true;
-                //    }
-                //    if (boss.yCenter < 100)
 
-                //    if (boss.xCenter < 400 - boss.width)
-                //    {
-                //        goLeft = false;
-                //    }
-                //}
-                //if (boss.yCenter == 100 && boss.xCenter == 400-boss.width && phase3initial == false)
-                //{
-                //    phase3initial = true;
-                //}
-
-                //if (boss.y == 100 && phase3initial == true)
-                //{
-                //    if (boss.xCenter >= 400 - boss.width)
-                //    {
-                //        goLeft = true;
-                //    }
-
-                //    if (boss.x <= 0 + boss.width)
-                //    {
-                //        goLeft = false;
-                //        goUp = false;
-                //    }
-
-
-                //    if (goLeft == true)
-                //    {
-                //        boss.Move("left");
-                //    }
-
-                //    if (goLeft == false)
-                //    {
-                //        boss.Move("right");
-                //    }
-
-                //    if (goUp == true)
-                //    {
-                //        boss.Move("up");
-                //    }
-                //    if (goUp == false)
-                //    {
-                //        boss.Move("down");
-                //    }
-                //}
 
             }
 
@@ -404,10 +419,7 @@ namespace BulletHell
             Refresh();
         }
 
-        private void colorBox_Click(object sender, EventArgs e)
-        {
-
-        }
+       
 
         private void GameScreencs_Paint(object sender, PaintEventArgs e)
         {
@@ -422,25 +434,43 @@ namespace BulletHell
             e.Graphics.FillRectangle(grayBrush, 0, 20, 338, 20);
             e.Graphics.FillRectangle(redBrush, 0, 25, (int)(boss.health * healthRatio), 10);
             e.Graphics.DrawString(healthbarText, new Font("Arial", 10), whiteBrush, 155, 20);
+
             //Shows Bomb
-            bombsOut.Text = me.bomb + "";
+            bombsOut.Text = bombamm + "";
 
             //Shows Points
+            points = graze * 7 + (bombamm * 100);
             pointsOut.Text = points + "";
 
             //Shows Graze
             grazeOut.Text = graze + "";
+
+            //Draws boss position arrow
             e.Graphics.FillPolygon(whiteBrush, arrow);
-            e.Graphics.FillEllipse(redBrush, me.x, me.y, me.size, me.size);
+
+            //Draws Me
+            if (justDied == true)
+            {
+                e.Graphics.FillEllipse(yellowBrush, me.x, me.y, me.size, me.size);
+            }
+
+            //Changes player color if not invulnerable
+            else
+            {
+                e.Graphics.FillEllipse(redBrush, me.x, me.y, me.size, me.size);
+            }
+
 
             //Show Boss
             e.Graphics.FillEllipse(yellowBrush, boss.x, boss.y, boss.height, boss.width);
 
-
+            //Draws enemy projectiles
             foreach (ProjectileCircle p in projectiles)
             {
                 e.Graphics.FillEllipse(blueBrush, p.x, p.y, p.size, p.size);
             }
+
+            //Draws our shots
             foreach (StringProjectile p in friendProjectiles)
             {
                 e.Graphics.FillRectangle(whiteBrush, p.x, p.y, p.width, p.height);
@@ -448,10 +478,12 @@ namespace BulletHell
             }
 
 
+
         }
 
         private void GameScreen_KeyUp(object sender, KeyEventArgs e)
         {
+            //Movement keys up
             switch (e.KeyCode)
             {
                 case Keys.A:
@@ -478,10 +510,7 @@ namespace BulletHell
             }
         }
 
-        private void GameScreencs_Load(object sender, EventArgs e)
-        {
-
-        }
+        
 
 
     }

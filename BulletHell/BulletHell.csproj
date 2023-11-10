@@ -53,6 +53,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Gameover.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Gameover.Designer.cs">
+      <DependentUpon>Gameover.cs</DependentUpon>
+    </Compile>
     <Compile Include="GameScreencs.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -72,6 +78,9 @@
     <Compile Include="StringProjectile.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gameover.resx">
+      <DependentUpon>Gameover.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GameScreencs.resx">
       <DependentUpon>GameScreencs.cs</DependentUpon>

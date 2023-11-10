@@ -35,14 +35,16 @@
             this.grazeLabel = new System.Windows.Forms.Label();
             this.livesLabel = new System.Windows.Forms.Label();
             this.bombLabel = new System.Windows.Forms.Label();
-            this.cardLabel = new System.Windows.Forms.Label();
+            this.controlLabel = new System.Windows.Forms.Label();
             this.pointsOut = new System.Windows.Forms.Label();
             this.grazeOut = new System.Windows.Forms.Label();
             this.livesOut = new System.Windows.Forms.Label();
             this.bombsOut = new System.Windows.Forms.Label();
-            this.cardOut = new System.Windows.Forms.Label();
+            this.control2Label = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.control3Label = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // gameTimer
@@ -56,9 +58,9 @@
             this.colorBox.BackColor = System.Drawing.Color.Purple;
             this.colorBox.Location = new System.Drawing.Point(451, 0);
             this.colorBox.Name = "colorBox";
-            this.colorBox.Size = new System.Drawing.Size(200, 545);
+            this.colorBox.Size = new System.Drawing.Size(200, 570);
             this.colorBox.TabIndex = 0;
-            this.colorBox.Click += new System.EventHandler(this.colorBox_Click);
+            
             // 
             // pointsLabel
             // 
@@ -105,16 +107,17 @@
             this.bombLabel.Text = "Bombs:";
             this.bombLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // cardLabel
+            // controlLabel
             // 
-            this.cardLabel.BackColor = System.Drawing.Color.Purple;
-            this.cardLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cardLabel.Location = new System.Drawing.Point(499, 390);
-            this.cardLabel.Name = "cardLabel";
-            this.cardLabel.Size = new System.Drawing.Size(100, 23);
-            this.cardLabel.TabIndex = 5;
-            this.cardLabel.Text = "Card";
-            this.cardLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.controlLabel.BackColor = System.Drawing.Color.Purple;
+            this.controlLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.controlLabel.Location = new System.Drawing.Point(499, 380);
+            this.controlLabel.Name = "controlLabel";
+            this.controlLabel.Size = new System.Drawing.Size(100, 23);
+            this.controlLabel.TabIndex = 5;
+            this.controlLabel.Text = "Controls";
+            this.controlLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            
             // 
             // pointsOut
             // 
@@ -160,16 +163,17 @@
             this.bombsOut.Text = "\"\"";
             this.bombsOut.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // cardOut
+            // control2Label
             // 
-            this.cardOut.BackColor = System.Drawing.Color.Purple;
-            this.cardOut.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cardOut.Location = new System.Drawing.Point(454, 413);
-            this.cardOut.Name = "cardOut";
-            this.cardOut.Size = new System.Drawing.Size(193, 73);
-            this.cardOut.TabIndex = 10;
-            this.cardOut.Text = "\"\"";
-            this.cardOut.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.control2Label.BackColor = System.Drawing.Color.Purple;
+            this.control2Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.control2Label.Location = new System.Drawing.Point(454, 413);
+            this.control2Label.Name = "control2Label";
+            this.control2Label.Size = new System.Drawing.Size(193, 46);
+            this.control2Label.TabIndex = 10;
+            this.control2Label.Text = "Move: WASD";
+            this.control2Label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            
             // 
             // label1
             // 
@@ -189,19 +193,44 @@
             this.label2.TabIndex = 12;
             this.label2.Text = "label2";
             // 
+            // control3Label
+            // 
+            this.control3Label.BackColor = System.Drawing.Color.Purple;
+            this.control3Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.control3Label.Location = new System.Drawing.Point(454, 459);
+            this.control3Label.Name = "control3Label";
+            this.control3Label.Size = new System.Drawing.Size(193, 46);
+            this.control3Label.TabIndex = 13;
+            this.control3Label.Text = "Focus: Shift";
+            this.control3Label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+           
+            // 
+            // label3
+            // 
+            this.label3.BackColor = System.Drawing.Color.Purple;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(454, 515);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(193, 46);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "Bomb: V";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // GameScreencs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.control3Label);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.cardOut);
+            this.Controls.Add(this.control2Label);
             this.Controls.Add(this.bombsOut);
             this.Controls.Add(this.livesOut);
             this.Controls.Add(this.grazeOut);
             this.Controls.Add(this.pointsOut);
-            this.Controls.Add(this.cardLabel);
+            this.Controls.Add(this.controlLabel);
             this.Controls.Add(this.bombLabel);
             this.Controls.Add(this.livesLabel);
             this.Controls.Add(this.grazeLabel);
@@ -210,7 +239,7 @@
             this.DoubleBuffered = true;
             this.Name = "GameScreencs";
             this.Size = new System.Drawing.Size(650, 570);
-            this.Load += new System.EventHandler(this.GameScreencs_Load);
+            
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.GameScreencs_Paint);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GameScreen_KeyUp);
             this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.GameScreen_PreviewKeyDown);
@@ -227,13 +256,15 @@
         private System.Windows.Forms.Label grazeLabel;
         private System.Windows.Forms.Label livesLabel;
         private System.Windows.Forms.Label bombLabel;
-        private System.Windows.Forms.Label cardLabel;
+        private System.Windows.Forms.Label controlLabel;
         private System.Windows.Forms.Label pointsOut;
         private System.Windows.Forms.Label grazeOut;
         private System.Windows.Forms.Label livesOut;
         private System.Windows.Forms.Label bombsOut;
-        private System.Windows.Forms.Label cardOut;
+        private System.Windows.Forms.Label control2Label;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label control3Label;
+        private System.Windows.Forms.Label label3;
     }
 }

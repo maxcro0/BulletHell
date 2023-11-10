@@ -9,6 +9,7 @@ namespace BulletHell
 {
     internal class ProjectileCircle
     {
+        //Constructor and intial variables
         public int size = 10;
         public float x, y, xSpeed, ySpeed;
         public int speed;
@@ -19,6 +20,7 @@ namespace BulletHell
 
         public ProjectileCircle(float _x, float _y, float _xSpeed, float _ySpeed, int _size, int _speed)
         {
+            //Variables used in the class
             x = _x;
             y = _y;
             xSpeed = _xSpeed;
@@ -30,6 +32,7 @@ namespace BulletHell
         }
         public ProjectileCircle(float _x, float _y, float _xSpeed, float _ySpeed, int _size, int _speed, float _angle)
         {
+            //Secondary constructor and variables 
             x = _x;
             y = _y;
             xSpeed = _xSpeed;
@@ -44,23 +47,14 @@ namespace BulletHell
 
         public void Move()
         {
+            //Updates x and y with new positions every frame
             x += xSpeed * speed;
             y += ySpeed * speed;
-
-            if (x < 0 || x > 625 - size)
-            {
-                //remove projectile
-            }
-
-            if (y < 0 || y > 500 - size)
-            {
-                //remove projectile
-            }
-
-
+           
         }
         public void Move2()
         {
+            //Funny movement 
             x += xSpeed * speed;
             y += ySpeed * speed;
 
@@ -82,20 +76,11 @@ namespace BulletHell
             ySpeed = (float)(Math.Sin(newAngle * Math.PI / 180.0));
 
             //  //bullet object requires float values to draw on screen
-
-
-            if (x < 0 || x > 625 - size)
-            {
-                //remove projectile
-            }
-
-            if (y < 0 || y > 500 - size)
-            {
-                //remove projectile
-            }
+           
         }
         public bool Collision(Player p)
         {
+            //New variables and hitboxes
             int xBox = (int)Math.Round(x);
             int yBox = (int)Math.Round(y);
             Rectangle projectileRec = new Rectangle(xBox + 2, yBox + 2, size - 4, size - 4);
@@ -104,15 +89,13 @@ namespace BulletHell
 
             if (projectileRec.IntersectsWith(playerRec))
             {
-
-
-
-
+                //Returns true if projectile hits player
                 return true;
             }
 
             if (projectileRec.IntersectsWith(playerGrazeRec))
             {
+                //Increments graze if projectiles hits player graze hitbox
                 GameScreencs.graze++;
             }
 

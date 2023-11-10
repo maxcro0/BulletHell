@@ -19,6 +19,7 @@ namespace BulletHell
         public int gapSwitch;
         List<ProjectileCircle> attack1List;
         List<ProjectileCircle> attack2List;
+        public List<ProjectileCircle> attack2rotatorsList;
 
 
         public Enemy1(int _x, int _y, int _xSpeed, int _ySpeed)
@@ -140,12 +141,15 @@ namespace BulletHell
                 //  ProjectileCircle p = new ProjectileCircle(x, y, size, bulletSpeed, (float)xStep, (float)-yStep);
                 ProjectileCircle p = new ProjectileCircle(45,60, (float)xStep, (float)yStep, 8, 5, thetaAngle);
                 ProjectileCircle b = new ProjectileCircle(300,60,(float)xStep, (float)yStep, 8, 5, thetaAngle);
-                
+
                 attack2List.Add(p);
                 attack2List.Add(b);
+
+                
             }
 
             return attack2List;
+            
         }
 
 

@@ -8,6 +8,7 @@ namespace BulletHell
 {
     internal class Player
     {
+        //Constructor stuff and variables
         public int size = 6;
         public int x, y, xSpeed, ySpeed;
         public int lives = 3;
@@ -17,6 +18,7 @@ namespace BulletHell
 
         public Player(int _x, int _y, int _xSpeed, int _ySpeed)
         {
+            //More variables 
             x = _x;
             y = _y;
             xSpeed = _xSpeed;
@@ -26,6 +28,7 @@ namespace BulletHell
         }
         public void Move(string direction)
         {
+            //Using a string, moves the player
             if (direction == "left")
             {
                 x -= xSpeed;
