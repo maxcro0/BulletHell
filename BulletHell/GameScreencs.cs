@@ -510,8 +510,5 @@ namespace BulletHell
             }
         }
 
-        
-
-
     }
 }
