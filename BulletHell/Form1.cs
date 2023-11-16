@@ -1,4 +1,10 @@
-﻿using System;
+﻿/// Author: Maxwell Croft
+/// Purpose : To (hopefully) make a hard bullethell game
+/// Date: 2023, 11, 16
+
+
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
